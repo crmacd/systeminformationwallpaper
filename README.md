@@ -1,2 +1,2 @@
-# systeminformationwallpaper
-System Information Wallpaper for Android
+# System Information Wallpaper
+## System Information Wallpaper for Android
