@@ -1,0 +1,11 @@
+apply plugin: 'com.android.instantapp'
+
+dependencies {
+    implementation project(':wallpaper')
+    implementation project(':base')
+}
+
+android {
+    signingConfigs {
+    }
+}

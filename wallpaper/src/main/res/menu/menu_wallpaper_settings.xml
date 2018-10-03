@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.www.systeminformationwallpaper.wallpaper.WallpaperSettings">
+    <item
+        android:id="@+id/MnuSelectNone"
+        android:title="@string/mnu_select_none" />
+    <item
+        android:id="@+id/MnuSelectAll"
+        android:orderInCategory="100"
+        android:title="@string/mnu_select_all"
+        app:showAsAction="never" />
+</menu>

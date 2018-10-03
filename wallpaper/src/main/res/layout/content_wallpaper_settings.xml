@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".WallpaperSettings"
+    tools:showIn="@layout/activity_wallpaper_settings">
+
+    <LinearLayout
+        android:layout_width="368dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/txtDisplaySettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display Settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <CheckBox
+            android:id="@+id/chbBluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="112dp" />
+
+        <CheckBox
+            android:id="@+id/chbIMEI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="IMEI"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <CheckBox
+            android:id="@+id/chbIMSI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IMSI"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="48dp" />
+
+        <CheckBox
+            android:id="@+id/chbPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Phone Number"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="176dp" />
+
+        <CheckBox
+            android:id="@+id/chbVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Version"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="80dp" />
+
+        <CheckBox
+            android:id="@+id/chbWireless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wireless"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="144dp" />
+
+        <TextView
+            android:id="@+id/txtColorSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Color Settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <EditText
+            android:id="@+id/txtColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="#FFFFF0, #880000, #006622, #000088"
+            android:inputType="text"
+            android:text="#880000" />
+
+        <CheckBox
+            android:id="@+id/chbTextInvert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Invert Text Color" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
