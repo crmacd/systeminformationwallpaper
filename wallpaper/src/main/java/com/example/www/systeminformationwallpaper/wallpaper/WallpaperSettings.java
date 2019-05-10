@@ -61,6 +61,18 @@ public class WallpaperSettings extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        DisplayMetrics objDisplayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(objDisplayMetrics);
+        int intWidth = objDisplayMetrics.widthPixels;
+        int intHeight = objDisplayMetrics.heightPixels;
+
+        EditText objWidthText = findViewById(R.id.txtWidth);
+        EditText objHeightText = findViewById(R.id.txtHeight);
+
+        objWidthText.setText(intWidth);
+        objHeightText.setText(intHeight);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +151,6 @@ public class WallpaperSettings extends AppCompatActivity {
 
     public boolean updateStrings() {
         try {
-            TelephonyManager objTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_TELEPHONY);
             }
@@ -149,7 +160,7 @@ public class WallpaperSettings extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SET_WALLPAPER) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, PERMISSION_REQUEST_WALLPAPER);
             }
-
+            TelephonyManager objTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             //strBluetooth = "BT:" + objBluetooth.getAdapter().getAddress();
             strBluetooth = android.provider.Settings.Secure.getString(getApplicationContext().getContentResolver(), "bluetooth_address");
             if (strBluetooth == null) {
@@ -190,10 +201,11 @@ public class WallpaperSettings extends AppCompatActivity {
      */
     public boolean createWallpaper() {
         //Setup Wallpaper
-        DisplayMetrics objDisplayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(objDisplayMetrics);
-        int intWidth = objDisplayMetrics.widthPixels;
-        int intHeight = objDisplayMetrics.heightPixels;
+        EditText objWidthText = findViewById(R.id.txtWidth);
+        EditText objHeightText = findViewById(R.id.txtHeight);
+        int intWidth = Integer.parseInt(objWidthText.getText().toString());
+        int intHeight = Integer.parseInt(objHeightText.getText().toString());
+
         int intBeginningY = intHeight / 8;
         int intFontSize = intHeight / 32;
         Bitmap objWallpaper = Bitmap.createBitmap(intWidth, intHeight, Bitmap.Config.ARGB_8888);

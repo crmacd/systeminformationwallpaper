@@ -95,5 +95,28 @@
             android:layout_height="wrap_content"
             android:text="Invert Text Color" />
 
+        <TextView
+            android:id="@+id/txtSizeSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Size Settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <EditText
+            android:id="@+id/txtWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Width"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/txtHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Height"
+            android:inputType="number" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
