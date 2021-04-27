@@ -70,8 +70,8 @@ public class WallpaperSettings extends AppCompatActivity {
         EditText objWidthText = findViewById(R.id.txtWidth);
         EditText objHeightText = findViewById(R.id.txtHeight);
 
-        objWidthText.setText(intWidth);
-        objHeightText.setText(intHeight);
+        objWidthText.setText(intWidth + "");
+        objHeightText.setText(intHeight + "");
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
