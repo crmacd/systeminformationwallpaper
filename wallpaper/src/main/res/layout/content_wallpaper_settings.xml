@@ -89,8 +89,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="#FFFFF0, #880000, #006622, #000088"
-            android:inputType="text"
-            android:text="#880000" />
+            android:inputType="text" />
 
         <CheckBox
             android:id="@+id/chbTextInvert"
@@ -106,19 +105,19 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <EditText
-            android:id="@+id/txtWidth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Width"
-            android:inputType="number" />
-
-        <EditText
             android:id="@+id/txtHeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Height"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/txtWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Width"
             android:inputType="number" />
 
     </LinearLayout>

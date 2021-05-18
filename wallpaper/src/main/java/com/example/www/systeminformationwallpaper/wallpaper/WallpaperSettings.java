@@ -1,7 +1,9 @@
 package com.example.www.systeminformationwallpaper.wallpaper;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.WallpaperManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +13,8 @@ import android.graphics.Paint;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -45,13 +49,15 @@ public class WallpaperSettings extends AppCompatActivity {
     private String strPhoneNumber = "";
     private String strVersion = "";
     private String strWireless = "";
+    private String strMake = "";
+    private String strModel = "";
 
     /**
      * Default stock onCreate for this Activity with a minor change to the
      * Floating action button to allow for updating the strings and saving
      * the wallpaper.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Variable for instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +76,11 @@ public class WallpaperSettings extends AppCompatActivity {
         EditText objWidthText = findViewById(R.id.txtWidth);
         EditText objHeightText = findViewById(R.id.txtHeight);
 
-        objWidthText.setText(intWidth + "");
-        objHeightText.setText(intHeight + "");
+        objWidthText.setText((intWidth + ""));
+        objHeightText.setText((intHeight + ""));
 
         fab.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.ECLAIR)
             @Override
             public void onClick(View view) {
                 updateStrings();
@@ -94,6 +101,7 @@ public class WallpaperSettings extends AppCompatActivity {
      *
      * @return String of the mac address detected to have wifi access.
      */
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private String getWifiMacAddress() {
         String strDefault = "02:00:00:00:00:00";
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -109,7 +117,10 @@ public class WallpaperSettings extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, PERMISSION_REQUEST_INTERNET);
         }
         WifiManager objWifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        String strMacAddress = objWifi.getConnectionInfo().getMacAddress();
+        String strMacAddress = null;
+        if (objWifi != null) {
+            strMacAddress = objWifi.getConnectionInfo().getMacAddress();
+        }
         //Log.d("getWifiMacAddress", "Default Call:" + strMacAddress);
         if (strMacAddress.equalsIgnoreCase(strDefault)) {
             try {
@@ -149,6 +160,7 @@ public class WallpaperSettings extends AppCompatActivity {
      * @return True if all the strings were updated successfully, false otherwise.
      */
 
+    @SuppressLint("HardwareIds")
     public boolean updateStrings() {
         try {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -161,25 +173,43 @@ public class WallpaperSettings extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, PERMISSION_REQUEST_WALLPAPER);
             }
             TelephonyManager objTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            //strBluetooth = "BT:" + objBluetooth.getAdapter().getAddress();
-            strBluetooth = android.provider.Settings.Secure.getString(getApplicationContext().getContentResolver(), "bluetooth_address");
+            strBluetooth = BluetoothAdapter.getDefaultAdapter().getAddress();
+            if (strBluetooth == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
+                strBluetooth = Settings.Secure.getString(getApplicationContext().getContentResolver(), "bluetooth_address");
+            }
             if (strBluetooth == null) {
                 strBluetooth = "02:00:00:00:00:00";
             }
             strBluetooth = "BT: " + strBluetooth;
-            strIMEI = "IMEI: " + objTelephony.getDeviceId();
-            strIMSI = objTelephony.getSubscriberId();
-            if (strIMSI == null) {
-                strIMSI = "No Sim";
+            if (objTelephony != null) {
+                strIMEI = objTelephony.getDeviceId();
+                if (strIMEI == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    strIMEI = objTelephony.getImei();
+                }
+                if (strIMEI == null) {
+                    strIMEI = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID).toUpperCase();
+                }
+                strIMEI = "IMEI: " + strIMEI;
+                strIMSI = objTelephony.getSubscriberId();
+
+                if (strIMSI == null) {
+                    strIMSI = "No Sim";
+                }
+                strIMSI = "IMSI: " + strIMSI;
+                strPhoneNumber = objTelephony.getLine1Number();
             }
-            strIMSI = "IMSI: " + strIMSI;
-            strPhoneNumber = objTelephony.getLine1Number();
             if (strPhoneNumber == null) {
                 strPhoneNumber = "No Number Assigned";
             }
             strPhoneNumber = "P#: " + strPhoneNumber;
             strVersion = "Version: " + Build.VERSION.RELEASE;
-            strWireless = "Wifi: " + this.getWifiMacAddress();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                strWireless = "Wifi: " + this.getWifiMacAddress();
+            }
+
+            strMake = Build.MANUFACTURER;
+            strModel = Build.MODEL;
+
         } catch (Exception expProblem) {
             Log.d("updateStrings", "BT: " + strBluetooth);
             Log.d("updateStrings", "IMEI: " + strIMEI);
@@ -199,6 +229,7 @@ public class WallpaperSettings extends AppCompatActivity {
      *
      * @return Returns true if the wallpaper updated successfully, false otherwise
      */
+    @RequiresApi(api = Build.VERSION_CODES.ECLAIR)
     public boolean createWallpaper() {
         //Setup Wallpaper
         EditText objWidthText = findViewById(R.id.txtWidth);
@@ -220,7 +251,7 @@ public class WallpaperSettings extends AppCompatActivity {
             objCanvas.drawPaint(objPaint);
         } catch (Exception expProblem) {
             Log.d("createWallpaper", objRGBText.getText().toString());
-            objPaint.setColor(Color.parseColor("#880000"));
+            objPaint.setColor(Color.parseColor("#008800"));
             objCanvas.drawPaint(objPaint);
         }
 
@@ -234,6 +265,10 @@ public class WallpaperSettings extends AppCompatActivity {
         }
 
         //Write strings to screen based on text box selections.
+        String strMakeModel = this.strMake + " " + strModel;
+        float fltMakeModelCenter = (objWallpaper.getWidth() - objPaint.measureText(strMakeModel)) / 2;
+        objCanvas.drawText(strMakeModel, fltMakeModelCenter, intBeginningY += intFontSize, objPaint);
+
         float fltVersionCenter = (objWallpaper.getWidth() - objPaint.measureText(this.strVersion)) / 2;
         objCheckBox = findViewById(R.id.chbVersion);
         if (objCheckBox.isChecked()) {
